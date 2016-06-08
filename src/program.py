@@ -174,7 +174,7 @@ class Program(Runnable):
               'python3': '*.py',
               'ruby': '*.rb',
               'go': '*.go',
-              'haskell': '*.hs',
+              'haskell': '*.hs *.lhs',
               'objectivec': '*.m',
               'prolog': '*.pl',
               'javascript': '*.js',
@@ -196,17 +196,17 @@ class Program(Runnable):
     _RUN = {
         'c': '%(exe)s',
         'cpp': '%(exe)s',
-        'java': '/usr/bin/java -XX:+UseSerialGC -Xss64m -Xms1024m -Xmx1024m -cp %(path)s %(mainclass)s',
+        'java': 'java -XX:+UseSerialGC -Xss64m -Xms1024m -Xmx1024m -cp %(path)s %(mainclass)s',
         'prolog': '%(exe)s',
-        'python2': '/usr/bin/python2 %(mainfile)s',
-        'python3': '/usr/bin/python3 %(mainfile)s',
+        'python2': 'python2 %(mainfile)s',
+        'python3': 'python3 %(mainfile)s',
         'ruby': '/usr/bin/ruby %(mainfile)s',
         'csharp': '/usr/bin/mono %(exe)s.exe',
         'go': '%(exe)s',
         'haskell': '%(exe)s',
         'dir': '%(path)s/run',
-        'javascript': '/usr/bin/js24 %(mainfile)s',
-        'php': '/usr/bin/php -n %(mainfile)s',
+        'javascript': 'js24 %(mainfile)s',
+        'php': 'php -n %(mainfile)s',
         }
     _RUN_PATH_VARS = ['path', 'mainfile', 'exe']
 
@@ -324,7 +324,6 @@ class Program(Runnable):
             logging.debug('Compiler failed (status %d) when compiling %s\n        Command used:\n%s' % (status, self.name, compiler))
             self._compile_result = False
             return False
-
         if self.lang == 'dir':
             run = Program._RUN[self.lang] % {'path': self.path}
             if not os.path.isfile(run) or not os.access(run, os.X_OK):
@@ -352,3 +351,4 @@ class Program(Runnable):
 
     def __str__(self):
         return 'Program(%s)' % (self.name)
+
